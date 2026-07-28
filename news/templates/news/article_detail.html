@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article.title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <header class="border-b bg-white py-4 px-8">
+        <a href="{% url 'home' %}" class="text-2xl font-black tracking-tighter uppercase">Reuters<span class="text-orange-600">.</span></a>
+    </header>
+
+    <main class="max-w-3xl mx-auto p-8 bg-white my-8 border shadow-sm">
+        <span class="text-xs font-bold text-orange-600 uppercase tracking-widest">{{ article.category.name }}</span>
+        <h1 class="text-4xl font-extrabold mt-2 mb-4 leading-tight">{{ article.title }}</h1>
+        <div class="text-sm text-gray-500 mb-6 border-b pb-4">
+            By <span class="font-semibold text-gray-800">{{ article.author.username }}</span> | Published {{ article.created_at|date:"F j, Y, g:i a" }}
+        </div>
+        <p class="text-xl font-medium text-gray-700 mb-6">{{ article.summary }}</p>
+        <div class="prose max-w-none text-gray-800 leading-relaxed whitespace-pre-line">
+            {{ article.content }}
+        </div>
+        <div class="mt-8 border-t pt-4">
+            <a href="{% url 'home' %}" class="text-orange-600 font-bold hover:underline">&larr; Back to Wire Feed</a>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% for article in articles %}
+    <div class="border-b pb-4 mb-4 last:border-b-0">
+        <span class="text-xs text-gray-400">{{ article.created_at|date:"H:i T" }}</span>
+        <h4 class="font-bold mt-1">
+            <a href="{% url 'article_detail' article.slug %}" class="hover:text-orange-600">{{ article.title }}</a>
+        </h4>
+    </div>
+{% empty %}
+    <p class="text-gray-500 text-sm">No more articles available.</p>
+{% endfor %}

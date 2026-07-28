@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reuters Clone - Breaking News & Financial Markets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- Market Ticker Bar -->
+    <div class="bg-black text-white text-xs py-2 px-4 overflow-x-auto whitespace-nowrap flex space-x-6">
+        <span class="font-bold text-orange-400">MARKETS:</span>
+        {% for ticker in tickers %}
+            <span>{{ ticker.symbol }} <strong class="{% if ticker.change_percentage >= 0 %}text-green-400{% else %}text-red-450{% endif %}">{{ ticker.price }} ({{ ticker.change_percentage }}%)</strong></span>
+        {% empty %}
+            <span>No market data available. Add tickers via Django Admin.</span>
+        {% endfor %}
+    </div>
+
+    <!-- Header -->
+    <header class="border-b bg-white py-4 px-8 flex justify-between items-center shadow-sm">
+        <h1 class="text-3xl font-black tracking-tighter uppercase">Reuters<span class="text-orange-600">.</span></h1>
+        <nav class="space-x-6 text-sm font-semibold">
+            {% for cat in categories %}
+                <a href="#" class="hover:text-orange-600">{{ cat.name }}</a>
+            {% endfor %}
+        </nav>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Lead Story -->
+        <div class="lg:col-span-2 bg-white border p-6 shadow-sm">
+            {% if lead_story %}
+                <span class="text-xs font-bold text-orange-600 uppercase tracking-widest">Breaking Wire</span>
+                <h2 class="text-4xl font-extrabold mt-2 mb-4 leading-tight">
+                    <a href="{% url 'article_detail' lead_story.slug %}" class="hover:underline">{{ lead_story.title }}</a>
+                </h2>
+                <p class="text-gray-700 mb-6 text-lg">{{ lead_story.summary }}</p>
+                <a href="{% url 'article_detail' lead_story.slug %}" class="inline-block bg-black text-white px-4 py-2 text-sm font-bold uppercase tracking-wider hover:bg-orange-600 transition">Read Full Story</a>
+            {% else %}
+                <p class="text-gray-500">No lead story designated. Go to Django Admin to mark an article as lead.</p>
+            {% endif %}
+        </div>
+
+        <!-- Latest News Sidebar -->
+        <div class="bg-white border p-6 shadow-sm">
+            <h3 class="text-lg font-bold border-b pb-2 mb-4 uppercase tracking-wider">Latest News</h3>
+            <div class="space-y-6">
+                {% for article in articles %}
+                    <div class="border-b pb-4 last:border-b-0">
+                        <span class="text-xs text-gray-400">{{ article.created_at|date:"H:i T" }}</span>
+                        <h4 class="font-bold mt-1">
+                            <a href="{% url 'article_detail' article.slug %}" class="hover:text-orange-600">{{ article.title }}</a>
+                        </h4>
+                    </div>
+                {% empty %}
+                    <p class="text-gray-500 text-sm">No published articles yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
